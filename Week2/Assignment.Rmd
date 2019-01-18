@@ -1,0 +1,207 @@
+---
+title: "Assignment"
+author: "Anderson Uyekita"
+date: "1 de dezembro de 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment Week 2
+
+Esta é uma tentativa de refazer o Assignment Week 2 usando o R.
+
+```{r,message=FALSE}
+# Loading Libraries
+library(readr)
+library(ggplot2)
+library(dplyr)
+```
+
+O _dataset_ possui as seguintes primeiros dados.
+
+```{r,message=FALSE}
+# Loading the data set
+# First column = population
+# Second Column = profit of food truck
+df_ex1 <- read_csv(file = "C:/Users/ander/Documents/machine_learning/machine-learning-ex1/ex1/ex1data1.txt",col_names = c("pop","profit"))
+
+head(df_ex1)
+```
+
+O gráfico abaixo apresenta Profit vs população.
+
+```{r}
+# Plotting the Graphic
+ggplot(df_ex1,aes(x = pop, y = profit)) +
+       geom_point()
+```
+
+Conforme as instruções, calcula-se inicialmente o _Cost Function_ que é definido por:
+
+$$J(\theta) = \frac{1}{2m} \sum_{i=1}^m{ (h_\theta(x^{(i)})-y^{(i)})^2} \tag{1}$$  
+
+A equação (1) pode ser reescrita usando-se os conceitos de matrizes e pelo fato de $h_\theta(x^{(i)})$ ser o mesmo que $\theta^Tx^{(i)}$.
+
+$$J(\theta) = \frac{1}{2m} \sum_{i=1}^m{\begin{pmatrix}\theta^Tx^{(i)} - y^{(i)}\end{pmatrix}^2}\tag{2}$$    
+
+Observe que na equação (2) $\theta^T$ é um vetor coluna que possui todos os coeficientes da hipótese adotada, neste problema adotou-se dois $\theta$.
+
+$$\theta = \begin{bmatrix} \theta_0 \\ \theta_1 \end{bmatrix} \text{ Logo,}\\
+\theta^T = \begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix} \tag{3}$$
+
+Para o caso de $x^{(i)}$ será também um vetor coluna cujos valores são os x's do _training data_.
+
+$$x^{(i)} = \begin{bmatrix} x_0^{(i)} \\ x_1^{(i)} \end{bmatrix} \tag{4}$$  
+Substituindo-se as equações (3) e (4) em (2), tem-se:
+
+$$J(\theta_0, \theta_1) = \frac{1}{2m} \sum_{i=1}^m{\begin{pmatrix}
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(i)} \\ x_1^{(i)} \end{bmatrix} - 
+y^{(i)}\end{pmatrix}^2}\tag{5}$$    
+
+A mágica do uso de matrizes para calcular o somatório do quadrado de cada elemento da matriz pode ser feito conforme a equação (6).
+
+$$A = \begin{bmatrix} a_{i1} \\ a_{i2} \\ \vdots \\ a_{n1}\end{bmatrix}$$
+
+$$A^T * A = \begin{bmatrix} a_{i1} \ \ a_{i2} \ \ \vdots \ \ a_{n1}\end{bmatrix}
+\begin{bmatrix} a_{i1} \\ a_{i2} \\ \vdots \\ a_{n1}\end{bmatrix} = a_{i1}^2 + a_{i2}^2 + \dots + a_{i3}^2$$
+
+
+$$A^T * A = \sum_{i = 1}^{n}a_i^2 \tag{6}$$
+Utilizando o conceito da equação (6) em (5), tem-se:
+
+$$A = \begin{bmatrix}{
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(1)} \\ x_1^{(1)} \end{bmatrix} - 
+y^{(1)}\\ 
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(2)} \\ x_1^{(2)} \end{bmatrix} - 
+y^{(2)} \\ \vdots \\
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(m)} \\ x_1^{(m)} \end{bmatrix} - 
+y^{(m)}}\end{bmatrix}\tag{6}$$   
+
+Note que a matriz A é uma matriz coluna de _m_ elementos. Utilizando outro truque, transforma-se esses vários produtos de vetores ($\theta$ e $x$) conforme o exemplo da equação (7).
+
+$$\begin{bmatrix} a_{11} \ b_{12} \\ a_{21} \ b_{22} \\ \vdots \\ a_{n1} \ b_{n2}\end{bmatrix}
+\begin{bmatrix} \beta_0 \\ \beta_1 \end{bmatrix} = 
+\begin{bmatrix}
+\begin{bmatrix} a_{11} \ b_{12} \end{bmatrix} \begin{bmatrix} \beta_0 \\ \beta_1 \end{bmatrix} \\ 
+\begin{bmatrix} a_{21} \ b_{22} \end{bmatrix} \begin{bmatrix} \beta_0 \\ \beta_1 \end{bmatrix} \\ 
+\vdots \\
+\begin{bmatrix} a_{n1} \ b_{n2} \end{bmatrix} \begin{bmatrix} \beta_0 \\ \beta_1 \end{bmatrix}
+\end{bmatrix} \tag{7}$$
+
+Nota-se uma similariedade entre a equação (6) e (7), exceto o fato do $y_i$, que pode ser isolado como um vetor $Y$.
+
+$$A = \underbrace{\begin{bmatrix}
+x_0^{(1)} \ x_1^{(1)} \\
+x_0^{(2)} \ x_1^{(2)} \\
+\vdots \\
+x_0^{(m)} \ x_1^{(m)}
+\end{bmatrix}}_{\hat X}
+\underbrace{
+\begin{bmatrix}
+\theta_0 \\ \theta_1
+\end{bmatrix}}_{\hat \theta} - 
+\underbrace{\begin{bmatrix}
+y^{(1)} \\ y^{(2)} \\ \vdots \\ y^{(m)}
+\end{bmatrix}}_{\hat Y} = 
+\begin{bmatrix}{
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(1)} \\ x_1^{(1)} \end{bmatrix} - 
+y^{(1)}\\ 
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(2)} \\ x_1^{(2)} \end{bmatrix} - 
+y^{(2)} \\ \vdots \\
+\begin{bmatrix} \theta_0 \ \ \theta_1 \end{bmatrix}\begin{bmatrix} x_0^{(m)} \\ x_1^{(m)} \end{bmatrix} - 
+y^{(m)}}\end{bmatrix} = \hat X \hat \theta - \hat Y\tag{8}$$  
+
+Observe que $\hat X$ é uma matriz cuja primeira coluna é de 1 (devido à constante $\theta_0$ que não possui nenhum $x_0$ associado) e a segunda coluna são os valores de $x_1^{(i)}$. Uma outra maneira de anotar $\hat X$ é conforme a equação (9).
+
+$$\hat X = \begin{bmatrix} - x^{(1)} - \\ - x^{(2)} - \\ \vdots \\ - x^{(m)} - \end{bmatrix} =
+\begin{bmatrix}
+x_0^{(1)} \ x_1^{(1)} \\
+x_0^{(2)} \ x_1^{(2)} \\
+\vdots \\
+x_0^{(m)} \ x_1^{(m)}
+\end{bmatrix} \tag{10}$$
+
+Logo, a equação 2 pode ser reescrita conforme a equação (11).
+
+$$J(\theta) = \frac{1}{2m} (\hat X \hat \theta - \hat Y)^T(\hat X \hat \theta - \hat Y) \tag{11}$$
+Observe que essa equação é a mesma que aparece na página 12, item 3.2 do arquivo ex1.pdf.
+
+```{r}
+# Creating the X matrix
+df_ex1 %>% select(pop) %>% mutate(cons = 1) %>% select(cons,pop) -> X
+
+# Defining theta as a column
+theta <- matrix(c(0,0),ncol =1)
+
+# Creating the real output vector
+y <- df_ex1 %>% select(profit)
+
+# Calculating A
+A <- as.matrix(X) %*% theta - as.matrix(y)
+
+# Calculating the Cost Function
+J <- 1/(2*nrow(df_ex1)) * t(A) %*% A
+```
+
+## Atualização de $\hat \theta$
+
+Os valores de $\theta$ podem ser atualizados a partir da derivada de $J(\theta)$, conforme a equação (12).
+
+$$\theta_j = \theta_j - \alpha \frac{1}{m} \frac{\partial}{\partial \theta_j}J(\hat \theta) \tag{12}$$
+
+Onde $\frac{\partial}{\partial \theta_j}J(\hat \theta)$ é a derivada parcial e detalhada na equação (13).
+
+$$\frac{\partial}{\partial \theta_j}J(\hat \theta) = \sum_{i = 1}^{m}{(h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)}} \tag{13}$$  
+
+Substituindo-se a hipótese ($h_\theta(x^{(i)})$) por $\theta_0x_0 + \theta_1x_1$, tem-se:
+
+$$\frac{\partial}{\partial \theta_j}J(\hat \theta) = \sum_{i = 1}^{m}{\underbrace{( \theta_0 x_0^{(i)} + \theta_1 x_1^{(i)} - y^{(i)})}_{A}x_j^{(i)}} \tag{13}$$  
+
+Observe que a equação (13) possui um fragmento da equação (6), o que nos leva a reescrevê-la de uma outra forma de acordo com a equação (14).
+
+$$\frac{\partial}{\partial \theta_j}J(\hat \theta) = (\theta_0 x_0^1 + \theta_1 x_1^1 - y^1)x_j^1 + (\theta_0 x_0^2 + \theta_1 x_1^2 - y^2)x_j^2 + \dots + (\theta_0 x_0^m + \theta_1 x_1^m - y^m)x_j^m \tag{14}$$
+
+Sabe-se que $j$ é a quantidade de $\theta$ da nossa hipótese, no caso deste _Assignment_ são dois. Desta maneira, tem-se que:
+
+$$\frac{\partial}{\partial \theta_0}J(\hat \theta) = (\theta_0 x_0^1 + \theta_1 x_1^1 - y^1)x_0^1 + \dots + (\theta_0 x_0^m + \theta_1 x_1^m - y^m)x_0^m \\
+\frac{\partial}{\partial \theta_1}J(\hat \theta) = (\theta_0 x_0^1 + \theta_1 x_1^1 - y^1)x_1^1 + \dots + (\theta_0 x_0^m + \theta_1 x_1^m - y^m)x_1^m \tag{15}$$
+
+Agregando as duas equações apresentadas em (15):
+
+$$\begin{bmatrix} \frac{\partial}{\partial \theta_0}J(\hat \theta) \\ \frac{\partial}{\partial \theta_2}J(\hat \theta)\end{bmatrix} = 
+\begin{bmatrix} x_0^1 \ \ x_0^2 \ \ \dots \ \ x_0^m \\ x_1^1 \ \ x_1^2 \ \ \dots \ \ x_1^m  \end{bmatrix}
+\underbrace{
+\begin{bmatrix} \theta_0 x_0^1 + \theta_1 x_1^1 - y^1 \\ \vdots \\ 
+\theta_0 x_0^m + \theta_1 x_1^m - y^m \end{bmatrix}}_{\hat B} \tag{16}$$
+
+Desmembrando $\hat B$, tem-se:
+
+$$\hat B = \begin{bmatrix} x_0^1 \ \ x_1^1 \\ \vdots \\ x_0^m \ \ x_1^m \end{bmatrix}
+\begin{bmatrix} \theta_0 \\ \theta_1 \end{bmatrix} -
+\begin{bmatrix} y^1 \\ \vdots \\ y^m\end{bmatrix}\tag{17}$$
+
+Por fim, substitui-se a equação (17) em (16).
+
+$$\begin{bmatrix} \frac{\partial}{\partial \theta_0}J(\hat \theta) \\ \frac{\partial}{\partial \theta_2}J(\hat \theta)\end{bmatrix} = 
+\begin{bmatrix} x_0^1 \ \ x_0^2 \ \ \dots \ \ x_0^m \\ x_1^1 \ \ x_1^2 \ \ \dots \ \ x_1^m  \end{bmatrix}
+\begin{Bmatrix}\begin{bmatrix} x_0^1 \ \ x_1^1 \\ \vdots \\ x_0^m \ \ x_1^m \end{bmatrix}
+\begin{bmatrix} \theta_0 \\ \theta_1 \end{bmatrix} -
+\begin{bmatrix} y^1 \\ \vdots \\ y^m\end{bmatrix}\end{Bmatrix} \tag{18}$$
+
+
+
+```{r}
+# Defaults values
+iterations = 1
+alpha = 0.01
+
+# theta update
+theta <- theta - alpha/nrow(df_ex1) * t(X) %*% (as.matrix(X) %*% theta - as.matrix(y))
+```
+
+
+
+

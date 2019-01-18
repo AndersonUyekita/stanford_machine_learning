@@ -1,0 +1,16 @@
+---
+title: "Week3"
+author: "Anderson Uyekita"
+date: "4 de dezembro de 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#
+
+## Q1
+
+Suppose that you have trained a logistic regression classifier, and it outputs on a new example xx a prediction h_\theta(x)h (x) = 0.7. This means (check all that apply):
