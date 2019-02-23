@@ -31,3 +31,9 @@ $$\begin{bmatrix} \theta_0 \\ \theta_1 \\ \vdots \\ \theta_n \end{bmatrix} =
 \begin{bmatrix} x_0 \\ x_1 \\ \vdots \\ x_n \end{bmatrix} -
 \begin{bmatrix} y_0 \\ y_1 \\ \vdots \\ y_n \end{bmatrix}\end{pmatrix}
 \begin{bmatrix} x_0^{(i)} \\ x_1^{(i)} \\ \vdots \\ x_2^{(i)} \end{bmatrix}\end{Bmatrix} \tag{17}$$
+
+a
+a
+a
+a
+a
