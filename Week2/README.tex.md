@@ -2,7 +2,7 @@
 
 #### Tags
 * Author : AH Uyekita
-* Title  :  _Linear Regression with One Variable_
+* Title  :  _Linear Regression with Multiple Variables_
 * Date   : 24/02/2019
 * Course : Machine Learning
     * **Instructor:** Andrew Ng
@@ -72,11 +72,3 @@ Where:
 * $range$: The subtraction of $max(x_i)$ and $min(x_i)$.
 
 You can also use as range the standard deviation of $x_i$.
-
-
-
-
-
-
-
-.
