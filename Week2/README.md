@@ -2,7 +2,7 @@
 
 #### Tags
 * Author : AH Uyekita
-* Title  :  _Linear Regression with One Variable_
+* Title  :  _Linear Regression with Multiple Variables_
 * Date   : 24/02/2019
 * Course : Machine Learning
     * **Instructor:** Andrew Ng
@@ -72,11 +72,3 @@ Where:
 * <img src="/Week2/tex/4f0ad1257b412cb14381be7758045979.svg?invert_in_darkmode&sanitize=true" align=middle width=42.51348089999998pt height=14.15524440000002pt/>: The subtraction of <img src="/Week2/tex/0db515af88cbc2004fbdf00c3b278aec.svg?invert_in_darkmode&sanitize=true" align=middle width=60.17046089999999pt height=24.65753399999998pt/> and <img src="/Week2/tex/3c82528e2550142d1bdbaebdd77441a8.svg?invert_in_darkmode&sanitize=true" align=middle width=57.61642094999999pt height=24.65753399999998pt/>.
 
 You can also use as range the standard deviation of <img src="/Week2/tex/9fc20fb1d3825674c6a279cb0d5ca636.svg?invert_in_darkmode&sanitize=true" align=middle width=14.045887349999989pt height=14.15524440000002pt/>.
-
-
-
-
-
-
-
-.
